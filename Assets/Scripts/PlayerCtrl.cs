@@ -9,11 +9,13 @@ public class PlayerCtrl : MonoBehaviour {
 
 	Rigidbody2D rb;
 	SpriteRenderer sr;
+	Animator anim;
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D>();
 		sr = GetComponent<SpriteRenderer>();
+		anim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -41,6 +43,8 @@ public class PlayerCtrl : MonoBehaviour {
 		else if (speed > 0f){
 			sr.flipX = false;
 		}
+
+		anim.SetInteger("State", 2);
 	}
 
 	void StopMovingHorizontal(){
