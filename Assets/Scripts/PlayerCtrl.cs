@@ -6,28 +6,18 @@ public class PlayerCtrl : MonoBehaviour {
 
 	public float horizontalSpeed = 10f;
 	public float jumpSpeed = 600f;
-
 	Rigidbody2D rb;
 	SpriteRenderer sr;
 	Animator anim;
-
 	bool isJumping = false;
-
 	public Transform feet;
-
 	public float feetWidth = 0.5f;
-
 	public float feetHeight = 0.1f;
-
 	public bool isGrounded;
-
 	public LayerMask whatIsGround;
-
 	bool canDoubleJump = false;
-
 	public float delayForDoubleJump = 0.2f;
 
-	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody2D>();
 		sr = GetComponent<SpriteRenderer>();
@@ -38,7 +28,6 @@ public class PlayerCtrl : MonoBehaviour {
 		Gizmos.DrawWireCube(feet.position, new Vector3(feetWidth, feetHeight, 0f));
 	}
 	
-	// Update is called once per frame
 	void Update () {
 
 		if (transform.position.y < GM.instance.yMinLive){
@@ -92,6 +81,7 @@ public class PlayerCtrl : MonoBehaviour {
 	void Jump(){
 		if (isGrounded){
 			isJumping = true;
+            AudioManager.instance.PlayJumpSound(gameObject);
 			rb.AddForce(new Vector2(0f, jumpSpeed));
 			anim.SetInteger("State", 1);
 
@@ -100,7 +90,8 @@ public class PlayerCtrl : MonoBehaviour {
 
 		if (canDoubleJump && !isGrounded){
 			rb.velocity = Vector2.zero;
-			rb.AddForce(new Vector2(0f, jumpSpeed));
+            AudioManager.instance.PlayJumpSound(gameObject);
+            rb.AddForce(new Vector2(0f, jumpSpeed));
 			anim.SetInteger("State", 1);
 			canDoubleJump = false;
 		}
@@ -118,6 +109,7 @@ public class PlayerCtrl : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.gameObject.CompareTag("Coin")) {
+            AudioManager.instance.PlayCoinPickupSound(other.gameObject);
             SFXManager.instance.ShowCoinParticles(other.gameObject);
             Destroy(other.gameObject);
         }
